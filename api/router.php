@@ -10,7 +10,7 @@ class RESTRouter {
         // endpoints для запросов
 
         //  http://localhost/index.php/rooms
-        $this->addRoute('GET', '/index.php/rooms', [$this, 'handleGetHotelRooms']);
+        $this->addRoute('GET', '/api/router.php/rooms', [$this, 'handleGetHotelRooms']);
     }
 
     private function addRoute($method, $route, $callback) {
@@ -22,7 +22,7 @@ class RESTRouter {
         $method = $_SERVER['REQUEST_METHOD'];
         
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        
+
         if (!isset($this->routes[$method][$uri])) {
 
             http_response_code(404);
