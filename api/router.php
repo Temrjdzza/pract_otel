@@ -8,9 +8,9 @@ class RESTRouter {
 
     public function __construct() {
         // endpoints для запросов
+        $this->addRoute('GET', '/api/router.php/rooms', [$this, 'GetHotelRooms']);
+        $this->addRoute('POST', '/api/router.php/roomReservation', [$this, 'PostHotelBooking']);
 
-        //  http://localhost/index.php/rooms
-        $this->addRoute('GET', '/api/router.php/rooms', [$this, 'handleGetHotelRooms']);
     }
 
     private function addRoute($method, $route, $callback) {
@@ -29,15 +29,18 @@ class RESTRouter {
             echo " '$method' Маршрут '$uri' не найден! 404";
             exit;
         }
+
+        $requestData = [
+            'method' => $method,
+            'uri' => $uri,
+            'get_params' => $_GET
+        ];
         
-        return ($this->routes[$method][$uri])();
+        return ($this->routes[$method][$uri])($requestData);
     }
 
-    private function handleGetHotelRooms() {
-        //echo "handleGetHotelRooms вызван<br>";
+    private function GetHotelRooms() {
         $table_name = 'HotelRooms';
-        
-        // Проверка подключения к БД
         $link = mysqli_connect(
             $this->host,
             $this->user,
@@ -51,31 +54,163 @@ class RESTRouter {
         }
         
         mysqli_set_charset($link, "utf8");
-
         
         try {
-            $result = mysqli_query($link, "SELECT * FROM {$table_name}");
+            // Получаем параметры фильтрации и сортировки из GET-запроса
+            $filters = $_GET;
             
-
-            if (!$result) {
-                throw new Exception(mysqli_error($link));
+            // Базовый SQL-запрос
+            $sql = "SELECT * FROM {$table_name}";
+            $params = [];
+            
+            // Если есть параметры фильтрации, добавляем WHERE
+            if (!empty($filters)) {
+                $sql .= " WHERE 1=1";
+                
+                // Фильтр по имени
+                if (isset($filters['room_type'])) {
+                    $sql .= " AND room_type LIKE ?";
+                    $params[] = "%{$filters['room_type']}%";
+                }
+                
+                // Фильтр по цене (диапазон)
+                if (isset($filters['price'])) {
+                    list($minPrice, $maxPrice) = explode('-', $filters['price']);
+                    $sql .= " AND price BETWEEN ? AND ?";
+                    $params[] = $minPrice;
+                    $params[] = $maxPrice;
+                }
+                
+                // Фильтр по количеству спальных мест
+                if (isset($filters['capacity'])) {
+                    $sql .= " AND capacity = ?";
+                    $params[] = $filters['capacity'];
+                }
             }
             
+            // Добавляем сортировку
+            $sortField = isset($filters['sort']) ? $filters['sort'] : 'room_type';
+            $sortOrder = isset($filters['order']) ? $filters['order'] : 'asc';
+            
+            // Проверяем корректность параметров сортировки
+            $validSortFields = ['room_type', 'price', 'capacity'];
+            if (!in_array($sortField, $validSortFields)) {
+                $sortField = 'room_type';
+            }
+            
+            $validSortOrders = ['asc', 'desc'];
+            if (!in_array($sortOrder, $validSortOrders)) {
+                $sortOrder = 'asc';
+            }
+            
+            $sql .= " ORDER BY {$sortField} {$sortOrder}";
+            
+            // Подготовка и выполнение запроса
+            $stmt = mysqli_prepare($link, $sql);
+            
+            if (!empty($params)) {
+                $types = str_repeat('s', count($params));
+                $stmt->bind_param($types, ...$params);
+            }
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
             $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            
             mysqli_close($link);
             
             header('Content-Type: application/json; charset=utf-8');
-
             echo json_encode([
                 'status' => 'success',
                 'data' => $rows
             ]);
             exit;
-
         } catch (Exception $e) {
-
+            header('Content-Type: application/json; charset=utf-8');
             http_response_code(500);
-            echo "Ошибка при получении списка номеров";
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ошибка при получении списка номеров'
+            ]);
+            exit;
+        }
+    }
+
+    private function PostHotelBooking($data) {
+        //echo "PostHotelBooking вызван<br>";
+        $id = isset($data['get_params']['id']) ? $data['get_params']['id'] : null;
+        $fio = isset($data['get_params']['fio']) ? $data['get_params']['fio'] : null;
+        $table_name = 'HotelRooms';
+    
+        // Проверка подключения к БД
+        $link = mysqli_connect(
+            $this->host,
+            $this->user,
+            $this->password,
+            $this->db_name
+        );
+    
+        if ($link === false) {
+            echo ("Ошибка подключения: ".mysqli_connect_error());
+            exit;
+        }
+    
+        mysqli_set_charset($link, "utf8");
+    
+        try {
+            // Сначала проверяем текущий статус брони
+            $checkBooked = mysqli_query($link, "SELECT booked FROM {$table_name} WHERE room_id = {$id}");
+            
+            if (!$checkBooked) {
+                throw new Exception(mysqli_error($link));
+            }
+    
+            $roomData = mysqli_fetch_assoc($checkBooked);
+            
+            // Если комната уже забронирована
+            if (!empty($roomData['booked'])) {
+                header('Content-Type: application/json; charset=utf-8');
+                http_response_code(400); // Bad Request
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Бронь уже существует для этой комнаты'
+                ]);
+                exit;
+            }
+    
+            // Если комната свободна - обновляем статус брони
+            $updateQuery = "
+            UPDATE HotelRooms
+            SET booked = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE room_id = ?
+            ";
+    
+            $stmt = mysqli_prepare($link, $updateQuery);
+            $stmt->bind_param("si", $fio, $id);
+            $stmt->execute();
+    
+            // Получаем обновленные данные
+            $result = mysqli_query($link, "SELECT * FROM {$table_name} WHERE room_id = {$id}");
+            if (!$result) {
+                throw new Exception(mysqli_error($link));
+            }
+    
+            $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            mysqli_close($link);
+    
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'status' => 'success',
+                'data' => $rows
+            ]);
+    
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ошибка при обработке брони'
+            ]);
         }
     }
 }
