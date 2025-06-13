@@ -10,6 +10,7 @@ class RESTRouter {
         // endpoints для запросов
         $this->addRoute('GET', '/api/router.php/rooms', [$this, 'GetHotelRooms']);
         $this->addRoute('POST', '/api/router.php/roomReservation', [$this, 'PostHotelBooking']);
+        $this->addRoute('GET','/api/router.php/sendBot', [$this,'SendBot']);
 
     }
 
@@ -212,6 +213,28 @@ class RESTRouter {
                 'message' => 'Ошибка при обработке брони'
             ]);
         }
+    }
+
+    private function SendBot($data) {
+        $message = isset($data['get_params']['message']) ? $data['get_params']['message'] : null;
+        $token = "7756708742:AAHg5g9DIwciXxhoAeV7B2YvQIs5pi-wb_M";
+        $chatId = "1093399849";
+
+        $url = "https://api.telegram.org/bot{$token}/sendMessage";
+        
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'chat_id' => $chatId,
+            'text' => $message
+        ]));
+        
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        return json_decode($response, true);
     }
 }
 
