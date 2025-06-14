@@ -1,0 +1,54 @@
+header {
+    top: 0;
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+
+    display: flex;
+    padding: 15px;
+
+    background-color: rgba(40, 25, 125, 0.8);
+    color: #ffffff;
+
+    * {
+        margin-top: auto;
+        margin-bottom: 1px;
+    }
+
+    a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-align: center;
+        align-items: center;
+        opacity: 1;
+    }
+
+    h1 {
+        font-size: 45px;
+    }
+
+    h2 {
+        font-size: 40px;
+    }
+
+    .otel-info {
+        margin-bottom: 2px;
+        margin-left: 5%;
+    }
+
+    div {
+        display: flex;
+        justify-content: space-between;
+        margin-right: auto;
+        margin-left: auto;
+
+        h2 {
+            margin-left: 40px;
+        }
+    }
+}
