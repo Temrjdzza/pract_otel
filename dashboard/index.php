@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="stylesheets/clear-stock.css"/>
         <link rel="stylesheet" href="stylesheets/main_page.css"/>
 
+
         <title>OTEL</title>
     </head>
 
@@ -17,13 +18,12 @@
             <img src="images/otel-outside.jpg">
             <div class="otel-mini__info">
                 <h3>Лучший отель в мире</h3>
-                <div class="rating-result">
-                   	<span class="active">★</span>
-                   	<span class="active">★</span>
-                   	<span class="active">★</span>
-                   	<span class="pol-active">★</span>
-                   	<span>★</span>
+                <div class="rating-result" id="rating-result">
+
                 </div>
+
+                <script src="javascripts/main_rating.js"></script>
+
             </div>
 
         </section>

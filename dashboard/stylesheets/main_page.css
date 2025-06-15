@@ -22,15 +22,39 @@
         }
 
         .rating-result {
-            width: 705px;
-            margin: 0 auto;
+            position: relative;
+            display: inline-block;
+        }
 
-            padding-left: 440px;
-            display: flex;
+        .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            margin-left: 55px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .rating-result:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .rating-result {
+            left: 50%;
+
+            margin-left: 100px;
 
             span {
                 padding: 0;
-                font-size: 32px;
+                font-size: 70px;
                 margin: 0 3px;
                 line-height: 1;
                 color: lightgrey;
@@ -44,7 +68,43 @@
                 color: gold;
             }
 
-            .pol-active {
+            .active-1 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-2 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-3 {
                 background: linear-gradient(
                     to right,
                     gold,
@@ -52,6 +112,118 @@
                     gold,
                     lightgrey,
                     lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-4 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-5 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-6 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-7 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-8 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    lightgrey,
+                    lightgrey
+                );
+                color: transparent;
+                background-clip: text;
+            }
+
+            .active-9 {
+                background: linear-gradient(
+                    to right,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
+                    gold,
                     lightgrey
                 );
                 color: transparent;
