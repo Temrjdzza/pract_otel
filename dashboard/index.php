@@ -18,11 +18,8 @@
             <img src="images/otel-outside.jpg">
             <div class="otel-mini__info">
                 <h3>Лучший отель в мире</h3>
-                <div class="rating-result" id="rating-result">
 
-                </div>
-
-                <script src="javascripts/main_rating.js"></script>
+                <?php include "components/rating.html"; ?>
 
             </div>
 
