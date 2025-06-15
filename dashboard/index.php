@@ -5,12 +5,12 @@
 
         <link rel="stylesheet" href="stylesheets/clear-stock.css"/>
         <link rel="stylesheet" href="stylesheets/main_page.css"/>
-        <link rel="stylesheet" href="stylesheets/footer.css"/>
 
+        <title>OTEL</title>
     </head>
 
     <body class="index">
-        <?php include "components/header.html" ?>
+        <?php include "components/header.html"; ?>
 
         <section class="info">
 
@@ -48,13 +48,6 @@
             </ul>
         </section>
 
-        <footer class="footer">
-            <div class="left">
-                <h2>Главный администратор</h2
-                <h2>+7 (800) 535 35-35</h2>
-                <h2>vkusni@mail.py</h2>
-            </div
-
-        </footer>
+        <?php include "components/footer.html"; ?>
     </body>
 </html>
