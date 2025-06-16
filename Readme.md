@@ -86,6 +86,33 @@ POST /api/router.php/roomReservation?id=1&fio=Иванов+Иван+Иванов
 }
 ```
 
+### 3. Получение списка контактов
+
+```
+GET /api/router.php/contacts
+```
+
+Параметры запроса:
+```
+GET /api/router.php/contacts
+```
+
+Ответ при успешном выполнении:
+
+```json
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "Иван Петров",
+            "email": "ivan@example.com",
+            "phone": "+7 912 345 67 89"
+        },
+        ...
+    ]
+}
+```
 ## Коды ошибок
 
 | Код | Описание                                      |
