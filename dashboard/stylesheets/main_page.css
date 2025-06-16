@@ -20,44 +20,6 @@
             background-color: rgba(0, 0, 0, 0.8);
             width: 400px;
         }
-
-        .rating-result {
-            width: 705px;
-            margin: 0 auto;
-
-            padding-left: 440px;
-            display: flex;
-
-            span {
-                padding: 0;
-                font-size: 32px;
-                margin: 0 3px;
-                line-height: 1;
-                color: lightgrey;
-
-                ::before {
-                    content: "★";
-                }
-            }
-
-            .active {
-                color: gold;
-            }
-
-            .pol-active {
-                background: linear-gradient(
-                    to right,
-                    gold,
-                    gold,
-                    gold,
-                    lightgrey,
-                    lightgrey,
-                    lightgrey
-                );
-                color: transparent;
-                background-clip: text;
-            }
-        }
     }
 }
 
