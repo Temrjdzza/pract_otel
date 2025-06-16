@@ -11,6 +11,7 @@ class RESTRouter {
         $this->addRoute('GET', '/api/router.php/rooms', [$this, 'GetHotelRooms']);
         $this->addRoute('POST', '/api/router.php/roomReservation', [$this, 'PostHotelBooking']);
         $this->addRoute('GET','/api/router.php/sendBot', [$this,'SendBot']);
+        $this->addRoute('GET', '/api/router.php/contacts', [$this,'GetContacts']);
 
     }
 
@@ -218,7 +219,7 @@ class RESTRouter {
     private function SendBot($data) {
         $message = isset($data['get_params']['message']) ? $data['get_params']['message'] : null;
         $token = "7756708742:AAHg5g9DIwciXxhoAeV7B2YvQIs5pi-wb_M";
-        $chatId = "1093399849";
+        $chatId = isset($data['get_params']['chatId']) ? $data['get_params']['chatId'] : null;
 
         $url = "https://api.telegram.org/bot{$token}/sendMessage";
         
@@ -235,6 +236,55 @@ class RESTRouter {
         curl_close($ch);
         
         return json_decode($response, true);
+    }
+
+    private function GetContacts($data) {
+        $table_name = 'Contacts';
+        $link = mysqli_connect(
+            $this->host,
+            $this->user,
+            $this->password,
+            $this->db_name
+        );
+
+        if ($link === false) {
+            echo ("Ошибка подключения: ".mysqli_connect_error());
+            exit;
+        }
+        
+        mysqli_set_charset($link, "utf8");
+
+        try {
+            // Получаем параметры фильтрации и сортировки из GET-запроса
+            $filters = $_GET;
+            
+            // Базовый SQL-запрос
+            $sql = "SELECT * FROM {$table_name}";
+
+            $stmt = mysqli_prepare($link, $sql);
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            
+            mysqli_close($link);
+            
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'status' => 'success',
+                'data' => $rows
+            ]);
+            exit;
+
+        }catch (Exception $e) {
+            header('Content-Type: application/json; charset=utf-8');
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Ошибка при получении контактов'
+            ]);
+            exit;
+        }
     }
 }
 
