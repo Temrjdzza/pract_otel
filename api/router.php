@@ -219,11 +219,10 @@ class RESTRouter {
     private function SendBot($data) {
         $message = isset($data['get_params']['message']) ? $data['get_params']['message'] : null;
         $token = "7756708742:AAHg5g9DIwciXxhoAeV7B2YvQIs5pi-wb_M";
-        $chatId = "1093399849";
+        $chatId = isset($data['get_params']['chatId']) ? $data['get_params']['chatId'] : null;
 
         $url = "https://api.telegram.org/bot{$token}/sendMessage";
         
-
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
