@@ -1,0 +1,24 @@
+.room {
+    background-color: #d6c2d7;
+    border-radius: 0 0 15px 15px;
+
+    h3 {
+        width: 100%;
+        text-align: center;
+        margin: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        height: 40px;
+        border: 5px black;
+        border-radius: 0 0 15px 15px;
+        background-color: #a100ff;
+
+        font-size: 20px;
+    }
+
+    .btn:hover {
+        background-color: limegreen;
+    }
+}

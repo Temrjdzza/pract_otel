@@ -1,0 +1,41 @@
+.tab {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    margin-bottom: 50px;
+    width: 95%;
+
+    .tab-div {
+        background-color: #d9d9d9;
+        width: 100%;
+        border-radius: 15px;
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+
+        button {
+            background-color: transparent;
+            border: 0;
+        }
+
+        .sort {
+            float: left;
+            margin-left: 15px;
+        }
+
+        .filter {
+            float: right;
+            margin-right: 15px;
+        }
+    }
+}
+
+.main {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    width: 95%;
+
+    .list-rooms {
+    }
+}
