@@ -59,11 +59,13 @@ POST /api/router.php/roomReservation
 |----------|---------|---------------------|------------------------|
 | id       | integer | ID номера для брони | 1                      |
 | fio      | string  | ФИО бронировщика    | "Иванов Иван Иванович" |
+| booking_start | datetime | Дата и время начала бронирования | "2025-06-20 14:00:00" |
+| booking_end | datetime | Дата и время окончания бронирования | "2025-06-22 12:00:00" |
 
 Пример запроса:
 
 ```
-POST /api/router.php/roomReservation?id=1&fio=Иванов+Иван+Иванович
+POST /api/router.php/roomReservation?id=1&fio=Иванов Иван Иванович&booking_start=2025-06-20 16:00:00&booking_end=2025-06-22 12:00:00
 ```
 
 Ответ при успешной бронировании:
@@ -71,18 +73,20 @@ POST /api/router.php/roomReservation?id=1&fio=Иванов+Иван+Иванов
 ```json
 {
     "status": "success",
-    "data": [
-        {
-            "room_id": "1",
-            "room_type": "Люкс",
-            "price": "15000.00",
-            "capacity": "2",
-            "description": "Президентский номер с видом на город",
-            "booked": "Иванов Иван Иванович",
-            "created_at": "2025-06-09 20:30:00",
-            "updated_at": "2025-06-12 21:24:48"
-        }
-    ]
+    "data": {
+        "booking_id": "7",
+        "room_id": "1",
+        "guest_name": "Иванов Иван Иванович",
+        "booking_start": "2025-06-20 16:00:00",
+        "booking_end": "2025-06-22 12:00:00",
+        "status": "active",
+        "created_at": "2025-06-17 11:18:23",
+        "updated_at": "2025-06-17 11:18:23",
+        "room_type": "Люкс",
+        "price": "15000.00",
+        "capacity": "2",
+        "description": "Президентский номер с видом на город"
+    }
 }
 ```
 

@@ -142,8 +142,9 @@ class RESTRouter {
         //echo "PostHotelBooking вызван<br>";
         $id = isset($data['get_params']['id']) ? $data['get_params']['id'] : null;
         $fio = isset($data['get_params']['fio']) ? $data['get_params']['fio'] : null;
-        $table_name = 'HotelRooms';
-    
+        $booking_start = isset($data['get_params']['booking_start']) ? $data['get_params']['booking_start'] : null;
+        $booking_end = isset($data['get_params']['booking_end']) ? $data['get_params']['booking_end'] : null;
+        
         // Проверка подключения к БД
         $link = mysqli_connect(
             $this->host,
@@ -151,63 +152,84 @@ class RESTRouter {
             $this->password,
             $this->db_name
         );
-    
+        
         if ($link === false) {
             echo ("Ошибка подключения: ".mysqli_connect_error());
             exit;
         }
-    
+        
         mysqli_set_charset($link, "utf8");
-    
-        try {
-            // Сначала проверяем текущий статус брони
-            $checkBooked = mysqli_query($link, "SELECT booked FROM {$table_name} WHERE room_id = {$id}");
+        
+        try 
+        {
+            // Проверяем доступность номера на запрошенный период
             
-            if (!$checkBooked) {
+            $checkAvailability = mysqli_query($link, 
+            "SELECT COUNT(*) as count 
+            FROM Bookings 
+            WHERE room_id = $id AND 
+            ((booking_start <= '$booking_start' AND booking_end >= '$booking_end') OR
+            (booking_start <= '$booking_end' AND booking_end >= '$booking_start'))", 
+            );
+
+            if (!$checkAvailability) {
                 throw new Exception(mysqli_error($link));
             }
-    
-            $roomData = mysqli_fetch_assoc($checkBooked);
-            
-            // Если комната уже забронирована
-            if (!empty($roomData['booked'])) {
+            $availability = mysqli_fetch_assoc($checkAvailability);
+
+            // Если номер занят в запрошенный период
+            if ($availability['count'] > 0) {
                 header('Content-Type: application/json; charset=utf-8');
                 http_response_code(400); // Bad Request
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Бронь уже существует для этой комнаты'
+                    'message' => 'Номер занят в запрошенный период'
                 ]);
                 exit;
             }
-    
-            // Если комната свободна - обновляем статус брони
-            $updateQuery = "
-            UPDATE HotelRooms
-            SET booked = ?,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE room_id = ?
+            
+            // Создаем новое бронирование
+            $insertQuery = "
+                INSERT INTO Bookings (
+                    room_id,
+                    guest_name,
+                    booking_start,
+                    booking_end,
+                    status
+                ) VALUES (?, ?, ?, ?, ?)
             ";
-    
-            $stmt = mysqli_prepare($link, $updateQuery);
-            $stmt->bind_param("si", $fio, $id);
+            
+            $stmt = mysqli_prepare($link, $insertQuery);
+            $status = 'active';
+            $stmt->bind_param("issss", $id, $fio, $booking_start, $booking_end, $status);
             $stmt->execute();
     
-            // Получаем обновленные данные
-            $result = mysqli_query($link, "SELECT * FROM {$table_name} WHERE room_id = {$id}");
+            // Получаем ID созданного бронирования
+            $booking_id = $stmt->insert_id;
+            
+            // Получаем данные о бронировании
+            $result = mysqli_query($link, "
+                SELECT b.*, hr.room_type, hr.price, hr.capacity, hr.description
+                FROM Bookings b
+                JOIN HotelRooms hr ON b.room_id = hr.room_id
+                WHERE b.booking_id = $booking_id
+            ",);
+            
             if (!$result) {
                 throw new Exception(mysqli_error($link));
             }
-    
+            
             $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             mysqli_close($link);
-    
+            
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode([
                 'status' => 'success',
-                'data' => $rows
+                'data' => $rows[0]
             ]);
-    
+            
         } catch (Exception $e) {
+            header('Content-Type: application/json; charset=utf-8');
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',

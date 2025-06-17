@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 16 2025 г., 12:02
+-- Время создания: Июн 17 2025 г., 10:24
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -20,6 +20,30 @@ SET time_zone = "+00:00";
 --
 -- База данных: `mybd`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `Bookings`
+--
+
+CREATE TABLE `Bookings` (
+  `booking_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `guest_name` varchar(300) NOT NULL,
+  `booking_start` datetime NOT NULL,
+  `booking_end` datetime NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `Bookings`
+--
+
+INSERT INTO `Bookings` (`booking_id`, `room_id`, `guest_name`, `booking_start`, `booking_end`, `status`, `created_at`, `updated_at`) VALUES
+(7, 1, 'Иванов Иван Иванович', '2025-06-20 16:00:00', '2025-06-22 12:00:00', 'active', '2025-06-17 08:18:23', '2025-06-17 08:18:23');
 
 -- --------------------------------------------------------
 
@@ -57,21 +81,20 @@ CREATE TABLE `HotelRooms` (
   `price` decimal(10,2) NOT NULL,
   `capacity` int(11) NOT NULL,
   `description` mediumtext NOT NULL,
-  `booked` varchar(300) NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `HotelRooms`
 --
 
-INSERT INTO `HotelRooms` (`room_id`, `room_type`, `price`, `capacity`, `description`, `booked`, `created_at`, `updated_at`) VALUES
-(1, 'Люкс', 15000.00, 2, 'Президентский номер с видом на город', 'Иванов Иван Иванович', '2025-06-09 17:30:00', '2025-06-12 18:24:48'),
-(2, 'Стандарт', 5000.00, 2, 'Уютный номер с двуспальной кроватью', '', '2025-06-09 17:30:00', '2025-06-09 17:30:00'),
-(3, 'Полулюкс', 9000.00, 3, 'Номер повышенной комфортности с дополнительным местом', '', '2025-06-09 17:30:00', '2025-06-09 17:35:00'),
-(4, 'Апартаменты', 20000.00, 4, 'Двухкомнатные апартаменты с кухонной зоной', '', '2025-06-09 17:30:00', '2025-06-12 17:55:34'),
-(5, 'Студия', 7000.00, 2, 'Маленький уютный номер для одного человека', '', '2025-06-09 17:30:00', '2025-06-09 17:30:00');
+INSERT INTO `HotelRooms` (`room_id`, `room_type`, `price`, `capacity`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'Люкс', 15000.00, 2, 'Президентский номер с видом на город', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
+(2, 'Стандарт', 5000.00, 2, 'Уютный номер с двуспальной кроватью', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
+(3, 'Полулюкс', 9000.00, 3, 'Номер повышенной комфортности с дополнительным местом', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
+(4, 'Апартаменты', 20000.00, 4, 'Двухкомнатные апартаменты с кухонной зоной', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
+(5, 'Студия', 7000.00, 2, 'Маленький уютный номер для одного человека', '2025-06-17 07:31:01', '2025-06-17 07:31:01');
 
 -- --------------------------------------------------------
 
@@ -107,6 +130,13 @@ INSERT INTO `hotel_reviews` (`id`, `fio`, `review`, `rating`, `publication_date`
 --
 
 --
+-- Индексы таблицы `Bookings`
+--
+ALTER TABLE `Bookings`
+  ADD PRIMARY KEY (`booking_id`),
+  ADD KEY `room_id` (`room_id`);
+
+--
 -- Индексы таблицы `Contacts`
 --
 ALTER TABLE `Contacts`
@@ -130,16 +160,38 @@ ALTER TABLE `hotel_reviews`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `Bookings`
+--
+ALTER TABLE `Bookings`
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT для таблицы `Contacts`
 --
 ALTER TABLE `Contacts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT для таблицы `HotelRooms`
+--
+ALTER TABLE `HotelRooms`
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT для таблицы `hotel_reviews`
 --
 ALTER TABLE `hotel_reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `Bookings`
+--
+ALTER TABLE `Bookings`
+  ADD CONSTRAINT `Bookings_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `HotelRooms` (`room_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
