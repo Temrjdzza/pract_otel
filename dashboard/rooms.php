@@ -15,6 +15,16 @@
         <section class="tab">
             <div class="tab-div">
                 <button class="sort">Сортировать</button>
+                <div class="sort-menu">
+                    <h3>Сортировка</h3><br>
+                    <button class="sort-price__up">&#11205;стоимость</button><br>
+                    <button class="sort-price__down">&#11206;стоимость</button><br>
+                    <button class="sort-capacity__up">&#11205;количество мест</button><br>
+                    <button class="sort-capacity__down">&#11206;количество мест</button><br>
+                    <button class="sort-type__up">&#11205;тип</button><br>
+                    <button class="sort-type__down">&#11206;тип</button><br>
+                    <button class="sort-reboot">сброс</button><br>
+                </div>
                 <button class="filter">Фильтры</button>
             </div>
         </section>
