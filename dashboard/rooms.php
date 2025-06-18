@@ -5,6 +5,7 @@
 
         <link rel="stylesheet" href="stylesheets/clear-stock.css" />
         <link rel="stylesheet" href="stylesheets/rooms_page.css" />
+        <link rel="stylesheet" href="stylesheets/room.css" />
         <link rel="stylesheet" href="stylesheets/slider.css" />
     </head>
 
@@ -19,8 +20,9 @@
         </section>
 
         <section class="main">
-            <ul class="list-rooms">
+            <ul class="list-rooms" id="list-rooms">
                 <?php include "components/room.html"; ?>
+                <script src="javascripts/rooms.js"></script>
             </ul>
         </section>
 
