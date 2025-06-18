@@ -25,7 +25,10 @@
                     <button class="sort-type__down">&#11206;тип</button><br>
                     <button class="sort-reboot">сброс</button><br>
                 </div>
+
                 <button class="filter">Фильтры</button>
+                <div class="filter-menu">
+                </div>
             </div>
         </section>
 
