@@ -12,7 +12,7 @@ class RESTRouter {
         $this->addRoute('POST', '/api/router.php/roomReservation', [$this, 'PostHotelBooking']);
         $this->addRoute('GET','/api/router.php/sendBot', [$this,'SendBot']);
         $this->addRoute('GET', '/api/router.php/contacts', [$this,'GetContacts']);
-
+        $this->addRoute('POST', '/api/router.php/leaveReview', [$this, 'PostReview']);
     }
 
     private function addRoute($method, $route, $callback) {
@@ -121,19 +121,10 @@ class RESTRouter {
             
             mysqli_close($link);
             
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode([
-                'status' => 'success',
-                'data' => $rows
-            ]);
+            $this->ExportResponse($rows);
             exit;
         } catch (Exception $e) {
-            header('Content-Type: application/json; charset=utf-8');
-            http_response_code(500);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Ошибка при получении списка номеров'
-            ]);
+            $this->ExportErorr(500, 'Ошибка при получении списка номеров');
             exit;
         }
     }
@@ -179,12 +170,7 @@ class RESTRouter {
 
             // Если номер занят в запрошенный период
             if ($availability['count'] > 0) {
-                header('Content-Type: application/json; charset=utf-8');
-                http_response_code(400); // Bad Request
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Номер занят в запрошенный период'
-                ]);
+                $this->ExportErorr(400, 'Номер занят в запрошенный период');
                 exit;
             }
             
@@ -222,19 +208,10 @@ class RESTRouter {
             $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             mysqli_close($link);
             
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode([
-                'status' => 'success',
-                'data' => $rows[0]
-            ]);
+            $this->ExportResponse($rows);
             
         } catch (Exception $e) {
-            header('Content-Type: application/json; charset=utf-8');
-            http_response_code(500);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Ошибка при обработке брони'
-            ]);
+            $this->ExportErorr(500, 'Ошибка при обработке брони');
         }
     }
 
@@ -290,22 +267,31 @@ class RESTRouter {
             
             mysqli_close($link);
             
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode([
-                'status' => 'success',
-                'data' => $rows
-            ]);
+            $this->ExportResponse($rows);
             exit;
 
         }catch (Exception $e) {
-            header('Content-Type: application/json; charset=utf-8');
-            http_response_code(500);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Ошибка при получении контактов'
-            ]);
-            exit;
+            $this->ExportErorr(500, 'Ошибка при получении контактов');
         }
+    }
+
+    private function ExportResponse($rows) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'status' => 'success',
+            'data' => $rows
+        ]);
+        exit;
+    }
+
+    private function ExportErorr($code, $message) {
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code($code);
+        echo json_encode([
+                'status' => 'error',
+                'message' => $message
+        ]);
+        exit;
     }
 }
 
