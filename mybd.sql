@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 19 2025 г., 19:44
+-- Время создания: Июн 19 2025 г., 23:33
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -143,12 +143,12 @@ CREATE TABLE `RoomImages` (
 --
 
 INSERT INTO `RoomImages` (`image_id`, `room_id`, `image_url`) VALUES
-(1, 1, 'https://localhost/image/photo_lux.jpg'),
-(2, 1, 'https://localhost/image/photo_lux1.jpg'),
-(3, 3, 'https://localhost/image/photo_pollux.jpg'),
-(4, 3, 'https://localhost/image/photo_pollux1.jpg'),
-(5, 2, 'https://localhost/image/photo_standart.jpg'),
-(6, 2, 'https://localhost/image/photo_standart1.jpg');
+(1, 1, '/image/photo_lux.jpg'),
+(2, 1, '/image/photo_lux1.jpg'),
+(3, 3, '/image/photo_pollux.jpg'),
+(4, 3, '/image/photo_pollux1.jpg'),
+(5, 2, '/image/photo_standart.jpg'),
+(6, 2, '/image/photo_standart1.jpg');
 
 --
 -- Индексы сохранённых таблиц
