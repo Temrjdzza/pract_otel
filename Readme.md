@@ -42,7 +42,11 @@ GET /api/router.php/rooms?room_type=люкс&price=1000-5000&capacity=2&sort=pri
       "capacity": 2,
       "booked": false,
       "created_at": "2025-06-09 20:30:00",
-      "updated_at": "2025-06-12 20:55:34"
+      "updated_at": "2025-06-12 20:55:34",
+      "images": [
+          "https://localhost/image/photo_lux.jpg",
+          "https://localhost/image/photo_lux1.jpg"
+      ]
     }
   ]
 }
