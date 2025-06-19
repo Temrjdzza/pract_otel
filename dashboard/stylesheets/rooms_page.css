@@ -71,6 +71,15 @@
                 flex-direction: row;
                 justify-content: space-between;
             }
+
+            .filter-capacity {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            button {
+            }
         }
     }
 }

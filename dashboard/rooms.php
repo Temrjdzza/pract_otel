@@ -46,7 +46,7 @@
                         <h4>количество мест</h4>
                         <input type="text" />
                     </div>
-                    <button></button>
+                    <button>Найти</button>
                 </div>
             </div>
         </section>
