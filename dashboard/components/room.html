@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <link rel="stylesheet" href="stylesheets/room.css" />
+    </head>
+
+    <body>
+        <template id="room-template">
+            <li class="room">
+                <div class="slider-container">
+                    <!-- для изображений -->
+                    <div class="slider"></div>
+                    <button
+                        class="prev-button"
+                        aria-label="Посмотреть предыдущий слайд"
+                    >
+                        &lt;
+                    </button>
+                    <button
+                        class="next-button"
+                        aria-label="Посмотреть следующий слайд"
+                    >
+                        &gt
+                    </button>
+                </div>
+
+                <h3 class="type">тип:</h3>
+                <h3 class="capacity">количество мест:</h3>
+                <h3 class="description">описание:</h3>
+                <h3 class="price">стоимость:</h3>
+                <button class="btn">Бронировать</button>
+            </li>
+        </template>
+    </body>
+</html>

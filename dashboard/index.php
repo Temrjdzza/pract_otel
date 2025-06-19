@@ -29,7 +29,7 @@
             <ul>
                 <li>
                     <div class="info"><h3>Если хочешь забронировать или просто посмотреть имеющиеся номера</h3></div>
-                    <button onclick="location.href='/'"><h3>то тебе
+                    <button onclick="location.href='rooms.php'"><h3>то тебе
                     сюда</h3></button>
                 </li>
                 <li>
