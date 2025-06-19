@@ -123,7 +123,7 @@ class RESTRouter {
             foreach ($rows as &$row) {
             // Если изображений нет или они пустые
             if (empty($row['images']) || $row['images'] === null) {
-                $row['images'] = ['https://localhost/image/default.jpg'];
+                $row['images'] = ['/image/default.jpg'];
             } else {
                 // Разбиваем строку с изображениями на массив
                 $row['images'] = explode(',', $row['images']);
