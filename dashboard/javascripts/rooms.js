@@ -113,10 +113,12 @@ function clear_list_rooms() {
 
 function url_constructor() {
   params = "";
-  if (filter_params["type"] != "") params += filter_params["type"] + "&";
-  if (filter_params["prices"] != "") params += filter_params["prices"] + "&";
+  if (filter_params["type"] != "")
+    params += "room_type=" + filter_params["type"] + "&";
+  if (filter_params["prices"] != "")
+    params += "price=" + filter_params["prices"] + "&";
   if (filter_params["capacity"] != "")
-    params += filter_params["capacity"] + "&";
+    params += "capacity=" + filter_params["capacity"] + "&";
 
   if (sort_params == "price_up") params += "sort=price&order=asc";
   if (sort_params == "price_down") params += "sort=price&order=desc";
@@ -186,3 +188,43 @@ sort_reboot.addEventListener("click", () => {
 });
 
 // filter menu
+const filter_menu = document.querySelector(".filter-menu");
+
+const filter = document.querySelector(".filter");
+filter.addEventListener("click", () => {
+  filter_menu.style.display = "flex";
+});
+
+const filter_combobox = filter_menu.querySelector(".combobox");
+const filter_price_min = filter_menu.querySelector(".price-min");
+const filter_price_max = filter_menu.querySelector(".price-max");
+const filter_capacity = filter_menu.querySelector(".capacity-count");
+
+const filter_reboot = filter_menu.querySelector(".reboot");
+filter_reboot.addEventListener("click", () => {
+  filter_params = {
+    type: "",
+    prices: "",
+    capacity: "",
+  };
+  increment_rooms(url_constructor());
+  filter_menu.style.display = "none";
+});
+
+const filter_find = filter_menu.querySelector(".find");
+filter_find.addEventListener("click", () => {
+  if (filter_combobox.value == "all") filter_params["type"] = "";
+  else filter_params["type"] = filter_combobox.value;
+
+  if (filter_price_min.value != "" && filter_price_max.value != "")
+    filter_params["prices"] =
+      filter_price_min.value + "-" + filter_price_max.value;
+  else filter_params["prices"] = "";
+
+  if (filter_capacity.value != "")
+    filter_params["capacity"] = filter_capacity.value;
+  else filter_params["capacity"] = "";
+
+  increment_rooms(url_constructor());
+  filter_menu.style.display = "none";
+});
