@@ -1,4 +1,10 @@
-let rat = 3.5;
+let rat = 3.7;
+
+fetch("/api/router.php/reviews")
+  .then((resp) => resp.json())
+  .then((data) => {
+    console.log(data);
+  });
 
 let doc = document.getElementById("rating-result");
 

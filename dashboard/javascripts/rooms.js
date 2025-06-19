@@ -6,7 +6,7 @@ let filter_params = {
   capacity: "",
 };
 
-const api = "http://localhost/api/router.php/rooms";
+const api = "/api/router.php/rooms";
 
 const template = document.getElementById("room-template");
 
