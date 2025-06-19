@@ -29,7 +29,14 @@
                 <button class="filter">Фильтры</button>
                 <div class="filter-menu">
                     <h3>Фильтры</h3><br>
-                    <input type="text" />
+                    <select name="example">
+                        <option selected="selected" value="all">Любой</option>
+                        <option value="Ap">Аппартаменты</option>
+                        <option value="Lux">Люкс</option>
+                        <option value="PolLux">Полулюкс</option>
+                        <option value="Standart">Стандарт</option>
+                        <option value="Stud">Студия</option>
+                    </select>
                     <div class="filter-price">
                         <h4>стоимость</h4>
                         <input type="text" placeholder="от" />

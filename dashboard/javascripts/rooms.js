@@ -28,11 +28,19 @@ function increment_rooms(url) {
 
         let slider_imgs = room.querySelector(".slider");
 
-        list_imgs.forEach((path) => {
+        let img_arr = data["data"][i]["images"];
+
+        for (let j = 0; j < img_arr.length; j++) {
           let new_img = document.createElement("img");
-          new_img.src = path;
+          new_img.src = img_arr[j];
           slider_imgs.appendChild(new_img);
-        });
+        }
+
+        if (img_arr.length == 0) {
+          let new_img = document.createElement("img");
+          new_img.src = "/images/default.jpg";
+          slider_imgs.appendChild(new_img);
+        }
 
         let type = room.querySelector(".type");
 
@@ -78,6 +86,11 @@ function increment_rooms(url) {
               slide.style.display = "none";
             }
           });
+        }
+
+        if (img_arr.length <= 1) {
+          prevButton.style.display = "none";
+          nextButton.style.display = "none";
         }
 
         updateSlider();
