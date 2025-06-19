@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 17 2025 г., 10:24
+-- Время создания: Июн 19 2025 г., 19:44
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `Bookings` (
 --
 
 INSERT INTO `Bookings` (`booking_id`, `room_id`, `guest_name`, `booking_start`, `booking_end`, `status`, `created_at`, `updated_at`) VALUES
-(7, 1, 'Иванов Иван Иванович', '2025-06-20 16:00:00', '2025-06-22 12:00:00', 'active', '2025-06-17 08:18:23', '2025-06-17 08:18:23');
+(7, 1, 'Иванов Иван Иванович', '2025-06-20 16:00:00', '2025-06-22 12:00:00', 'active', '2025-06-17 08:18:23', '2025-06-17 08:18:23'),
+(8, 3, 'Иванов Иван Иванович', '2025-06-20 16:00:00', '2025-06-22 12:00:00', 'active', '2025-06-18 05:48:01', '2025-06-18 05:48:01');
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ CREATE TABLE `HotelRooms` (
 --
 
 INSERT INTO `HotelRooms` (`room_id`, `room_type`, `price`, `capacity`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Люкс', 15000.00, 2, 'Президентский номер с видом на город', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
+(1, 'Люкс', 15000.00, 2, 'Президентский номер с видом на город', '2025-06-17 07:31:01', '2025-06-19 15:28:54'),
 (2, 'Стандарт', 5000.00, 2, 'Уютный номер с двуспальной кроватью', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
 (3, 'Полулюкс', 9000.00, 3, 'Номер повышенной комфортности с дополнительным местом', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
 (4, 'Апартаменты', 20000.00, 4, 'Двухкомнатные апартаменты с кухонной зоной', '2025-06-17 07:31:01', '2025-06-17 07:31:01'),
@@ -125,6 +126,30 @@ INSERT INTO `hotel_reviews` (`id`, `fio`, `review`, `rating`, `publication_date`
 (7, 'Соколова Наталья Алексеевна', 'Рекомендую бронировать номера с видом на море. Спасибо за прекрасный отдых!', 4.5, '2025-06-14 06:50:49', '2025-06-16 10:02:38'),
 (8, 'Васильев Сергей Николаевич', 'Хорошее соотношение цена-качество. Рекомендую всем.', 4, '2025-06-14 06:50:49', '2025-06-16 10:02:46');
 
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `RoomImages`
+--
+
+CREATE TABLE `RoomImages` (
+  `image_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `image_url` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `RoomImages`
+--
+
+INSERT INTO `RoomImages` (`image_id`, `room_id`, `image_url`) VALUES
+(1, 1, 'https://localhost/image/photo_lux.jpg'),
+(2, 1, 'https://localhost/image/photo_lux1.jpg'),
+(3, 3, 'https://localhost/image/photo_pollux.jpg'),
+(4, 3, 'https://localhost/image/photo_pollux1.jpg'),
+(5, 2, 'https://localhost/image/photo_standart.jpg'),
+(6, 2, 'https://localhost/image/photo_standart1.jpg');
+
 --
 -- Индексы сохранённых таблиц
 --
@@ -156,6 +181,13 @@ ALTER TABLE `hotel_reviews`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `RoomImages`
+--
+ALTER TABLE `RoomImages`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `idx_room_id` (`room_id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -163,7 +195,7 @@ ALTER TABLE `hotel_reviews`
 -- AUTO_INCREMENT для таблицы `Bookings`
 --
 ALTER TABLE `Bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `Contacts`
@@ -184,6 +216,12 @@ ALTER TABLE `hotel_reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT для таблицы `RoomImages`
+--
+ALTER TABLE `RoomImages`
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- Ограничения внешнего ключа сохраненных таблиц
 --
 
@@ -192,6 +230,12 @@ ALTER TABLE `hotel_reviews`
 --
 ALTER TABLE `Bookings`
   ADD CONSTRAINT `Bookings_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `HotelRooms` (`room_id`);
+
+--
+-- Ограничения внешнего ключа таблицы `RoomImages`
+--
+ALTER TABLE `RoomImages`
+  ADD CONSTRAINT `RoomImages_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `HotelRooms` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
