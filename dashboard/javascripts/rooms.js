@@ -116,7 +116,7 @@ function url_constructor() {
 }
 
 // Buttons clickabled
-
+// sort menu
 const sort = document.querySelector(".sort");
 sort.addEventListener("click", () => {
   document.querySelector(".sort-menu").style.display = "flex";
@@ -171,3 +171,5 @@ sort_reboot.addEventListener("click", () => {
   increment_rooms(url_constructor());
   sort_menu.style.display = "none";
 });
+
+// filter menu

@@ -28,6 +28,18 @@
 
                 <button class="filter">Фильтры</button>
                 <div class="filter-menu">
+                    <h3>Фильтры</h3><br>
+                    <input type="text" />
+                    <div class="filter-price">
+                        <h4>стоимость</h4>
+                        <input type="text" placeholder="от" />
+                        <input type="text" placeholder="до" />
+                    </div>
+                    <div class="filter-capacity">
+                        <h4>количество мест</h4>
+                        <input type="text" />
+                    </div>
+                    <button></button>
                 </div>
             </div>
         </section>
