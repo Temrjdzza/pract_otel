@@ -144,7 +144,6 @@ CREATE TABLE `RoomImages` (
 
 INSERT INTO `RoomImages` (`image_id`, `room_id`, `image_url`) VALUES
 (1, 1, '/image/photo_lux.jpg'),
-(2, 1, '/image/photo_lux1.jpg'),
 (3, 3, '/image/photo_pollux.jpg'),
 (4, 3, '/image/photo_pollux1.jpg'),
 (5, 2, '/image/photo_standart.jpg'),
