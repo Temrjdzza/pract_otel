@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 19 2025 г., 23:33
+-- Время создания: Июн 20 2025 г., 09:48
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -100,10 +100,10 @@ INSERT INTO `HotelRooms` (`room_id`, `room_type`, `price`, `capacity`, `descript
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `hotel_reviews`
+-- Структура таблицы `Hotel_reviews`
 --
 
-CREATE TABLE `hotel_reviews` (
+CREATE TABLE `Hotel_reviews` (
   `id` int(11) NOT NULL,
   `fio` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `review` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -113,10 +113,10 @@ CREATE TABLE `hotel_reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Дамп данных таблицы `hotel_reviews`
+-- Дамп данных таблицы `Hotel_reviews`
 --
 
-INSERT INTO `hotel_reviews` (`id`, `fio`, `review`, `rating`, `publication_date`, `last_modified_date`) VALUES
+INSERT INTO `Hotel_reviews` (`id`, `fio`, `review`, `rating`, `publication_date`, `last_modified_date`) VALUES
 (1, 'Петров Петр Петрович', 'Отель превосходит все ожидания! Чистые номера, вкусная еда, отличное расположение.', 5, '2025-06-14 06:50:49', '2025-06-16 10:01:48'),
 (2, 'Иванова Мария Сергеевна', 'Персонал очень дружелюбный и внимательный. Номера оснащены всем необходимым.', 5, '2025-06-14 06:50:49', '2025-06-16 10:01:55'),
 (3, 'Смирнов Алексей Михайлович', 'В целом неплохо, но могли бы добавить больше каналов на телевидении.', 4.5, '2025-06-14 06:50:49', '2025-06-16 10:01:14'),
@@ -144,6 +144,7 @@ CREATE TABLE `RoomImages` (
 
 INSERT INTO `RoomImages` (`image_id`, `room_id`, `image_url`) VALUES
 (1, 1, '/image/photo_lux.jpg'),
+(2, 1, '/image/photo_lux1.jpg'),
 (3, 3, '/image/photo_pollux.jpg'),
 (4, 3, '/image/photo_pollux1.jpg'),
 (5, 2, '/image/photo_standart.jpg'),
@@ -174,9 +175,9 @@ ALTER TABLE `HotelRooms`
   ADD PRIMARY KEY (`room_id`);
 
 --
--- Индексы таблицы `hotel_reviews`
+-- Индексы таблицы `Hotel_reviews`
 --
-ALTER TABLE `hotel_reviews`
+ALTER TABLE `Hotel_reviews`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -209,9 +210,9 @@ ALTER TABLE `HotelRooms`
   MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT для таблицы `hotel_reviews`
+-- AUTO_INCREMENT для таблицы `Hotel_reviews`
 --
-ALTER TABLE `hotel_reviews`
+ALTER TABLE `Hotel_reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
