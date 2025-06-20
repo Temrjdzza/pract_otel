@@ -95,6 +95,21 @@ function increment_rooms(url) {
 
         updateSlider();
 
+        const room_id = data["data"][i]["room_id"];
+        let bron_btn = room.querySelector(".btn");
+        bron_btn.addEventListener("click", () => {
+          const bron_menu_template = document.getElementById(
+            "bron-menu__template",
+          );
+          const bron_menu = bron_menu_template.content.cloneNode(true);
+
+          const one_price = bron_menu.querySelector(".one-price");
+          one_price.textContent = data["data"][i]["price"];
+
+          create_dialog_bron(bron_menu, room_id);
+          list_rooms.appendChild(bron_menu);
+        });
+
         list_rooms.appendChild(room);
       }
     });
@@ -128,6 +143,247 @@ function url_constructor() {
   if (sort_params == "type_down") params += "sort=type&order=desc";
 
   return api + "?" + params;
+}
+
+function create_dialog_bron(el, room_id) {
+  let date = new Date(),
+    year = date.getFullYear(),
+    month = date.getMonth();
+
+  setCalendar(year, month, el);
+
+  const fio = el.querySelector(".input-fio");
+
+  const btn_bron = el.querySelector(".bron");
+
+  btn_bron.addEventListener("click", () => {
+    const period = get_dates_bron();
+
+    try {
+      let start_date = `${period[0].getFullYear()}-${period[0].getMonth() + 1}-${period[0].getDate()} ${period[0].getHours()}:${period[0].getMinutes()}:${period[0].getSeconds()}`;
+
+      let end_date = `${period[1].getFullYear()}-${period[1].getMonth() + 1}-${period[1].getDate()} ${period[1].getHours()}:${period[1].getMinutes()}:${period[1].getSeconds()}`;
+
+      const url = `/api/router.php/roomReservation?id=${room_id}&fio=${fio.value}&booking_start=${start_date}&booking_end=${end_date}`;
+
+      fetch(url).then();
+    } catch {}
+
+    const parent = document.querySelector(".list-rooms");
+    const e_el = parent.querySelector(".bron-menu");
+    parent.removeChild(e_el);
+  });
+
+  const btn_cancel = el.querySelector(".cancel");
+  btn_cancel.addEventListener("click", () => {
+    const parent = document.querySelector(".list-rooms");
+    const e_el = parent.querySelector(".bron-menu");
+    parent.removeChild(e_el);
+  });
+}
+
+function get_dates_bron() {
+  let arr = [];
+  const list_rooms = document.querySelector(".list-rooms");
+  const bron_menu = list_rooms.querySelector(".bron-menu");
+  const days = bron_menu.querySelector(".days");
+
+  const year = bron_menu.querySelector(".month-year").textContent.split(" ")[1];
+  const month = months.indexOf(
+    bron_menu.querySelector(".month-year").textContent.split(" ")[0],
+  );
+
+  const children = days.children;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your") {
+      arr.push(new Date(year, month, children[i].textContent));
+      break;
+    }
+  }
+
+  for (let i = children.length - 1; i >= 0; i--) {
+    if (children[i].className == "your") {
+      arr.push(new Date(year, month, children[i].textContent));
+      break;
+    }
+  }
+
+  return arr;
+}
+
+const months = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
+
+function setCalendar(year, month, el) {
+  let prevlastday = new Date(year, month, 0);
+  let lastday = new Date(year, month + 1, 0);
+  let ulEl = el.querySelector(".days");
+
+  const month_year = el.querySelector(".month-year");
+
+  month_year.textContent = months[month] + " " + year;
+
+  ulEl.innerHTML = ``;
+
+  for (let i = prevlastday.getDay() - 1; i >= 0; i--) {
+    let li = document.createElement("li");
+    li.classList.add("not-active");
+    let h3 = document.createElement("h3");
+    h3.textContent = prevlastday.getDate() - i;
+    li.appendChild(h3);
+    ulEl.appendChild(li);
+  }
+
+  for (let i = 1; i <= lastday.getDate(); i++) {
+    let li = document.createElement("li");
+    let h3 = document.createElement("h3");
+    h3.textContent = i;
+    h3.addEventListener("click", () => {
+      if (li.className == "") {
+        li.className = "your";
+        if (!line_your()) li.className = "";
+      } else if (li.className == "your") {
+        li.className = "";
+        anti_line_your();
+      }
+      final_price();
+    });
+    li.appendChild(h3);
+    ulEl.appendChild(li);
+  }
+
+  for (let i = 1; lastday.getDay() + i <= 7; i++) {
+    let li = document.createElement("li");
+    li.classList.add("not-active");
+    let h3 = document.createElement("h3");
+    h3.textContent = i;
+    li.appendChild(h3);
+    ulEl.appendChild(li);
+  }
+
+  const prev_btn = el.querySelector(".left-btn");
+  prev_btn.addEventListener("click", () => {
+    date = new Date(year, month - 1);
+    year = date.getFullYear();
+    month = date.getMonth();
+    setCalendar(year, month);
+  });
+
+  const next_btn = el.querySelector(".right-btn");
+  next_btn.addEventListener("click", () => {
+    date = new Date(year, month + 1);
+    year = date.getFullYear();
+    month = date.getMonth();
+    setCalendar(year, month);
+  });
+}
+
+function line_your() {
+  const list_rooms = document.querySelector(".list-rooms");
+  const bron_menu = list_rooms.querySelector(".bron-menu");
+  const days = bron_menu.querySelector(".days");
+  const children = days.children;
+
+  let y_count = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your") y_count++;
+  }
+
+  if (y_count < 2) return true;
+
+  let y_i_count = 0;
+  let your = false;
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your" && your) {
+      y_i_count++;
+    } else if (children[i].className == "your" && !your) {
+      your = true;
+      y_i_count++;
+    } else if (children[i].className == "" && your)
+      children[i].className = "your";
+    else if (
+      children[i].className != "your" &&
+      children[i].className != "" &&
+      your
+    )
+      return false;
+
+    if (y_i_count == y_count) return true;
+  }
+
+  return true;
+}
+
+function anti_line_your() {
+  const list_rooms = document.querySelector(".list-rooms");
+  const bron_menu = list_rooms.querySelector(".bron-menu");
+  const days = bron_menu.querySelector(".days");
+  const children = days.children;
+
+  let y_count = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your") y_count++;
+  }
+  if (y_count < 2) return true;
+
+  let arr = [];
+
+  let your = false;
+  for (let i = children.length - 1; i >= 0; i--) {
+    if (children[i].className == "" && your) your = false;
+    else if (children[i].className == "your" && your) {
+      arr.push(children[i]);
+    } else if (children[i].className == "your" && !your) {
+      if (arr.length > 0) {
+        arr.forEach((child) => {
+          child.className = "";
+        });
+        return true;
+      }
+      arr.push(children[i]);
+      your = true;
+    } else if (
+      children[i].className != "your" &&
+      children[i].className != "" &&
+      your
+    )
+      return false;
+  }
+
+  return true;
+}
+
+function final_price() {
+  const list_rooms = document.querySelector(".list-rooms");
+  const bron_menu = list_rooms.querySelector(".bron-menu");
+  const one_price = bron_menu.querySelector(".one-price");
+  const price = parseFloat(one_price.textContent);
+  const final_price = bron_menu.querySelector(".final-price");
+  const days = bron_menu.querySelector(".days");
+  const children = days.children;
+
+  let count = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your") count++;
+  }
+
+  final_price.textContent = count * price;
 }
 
 // Buttons clickabled

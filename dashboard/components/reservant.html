@@ -2,52 +2,53 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-
-        <link rel="stylesheet" href="stylesheets/room.css" />
     </head>
 
     <body>
-        <div class="bron-menu">
-            <div class="left">
-                <h3 class="info">ФИО</h3>
-                <input class="input-fio" />
-                <h3 class="info">Стоимость за 1 день</h3>
-                <h3 class="one-price">0</h3>
-                <h3 class="info">Конечная стоимость</h3>
-                <h3 class="final-price">0</h3>
-            </div>
-            <div class="right">
-                <div class="calendar">
-                    <div class="calendar-tab">
-                        <button class="left-btn">&#60;</button>
-                        <h3 class="month-year">Апрель 2025</h3>
-                        <button class="right-btn">&#62;</button>
+        <template id="bron-menu__template">
+            <dialog class="bron-menu">
+                <div class="window">
+                    <div class="left">
+                        <h3 class="info">ФИО</h3>
+                        <input class="input-fio" />
+                        <h3 class="info">Стоимость за 1 день</h3>
+                        <h3 class="one-price">0</h3>
+                        <h3 class="info">Конечная стоимость</h3>
+                        <h3 class="final-price">0</h3>
                     </div>
-                    <ul class="name-days">
-                        <li><h3>пн</h3></li>
-                        <li><h3>вт</h3></li>
-                        <li><h3>ср</h3></li>
-                        <li><h3>чт</h3></li>
-                        <li><h3>пт</h3></li>
-                        <li><h3>сб</h3></li>
-                        <li><h3>вс</h3></li>
-                    </ul>
-                    <ul class="days"></ul>
-                    <script src="javascripts/calendar.js"></script>
+                    <div class="right">
+                        <div class="calendar">
+                            <div class="calendar-tab">
+                                <button class="left-btn">&#60;</button>
+                                <h3 class="month-year">Апрель 2025</h3>
+                                <button class="right-btn">&#62;</button>
+                            </div>
+                            <ul class="name-days">
+                                <li><h3>пн</h3></li>
+                                <li><h3>вт</h3></li>
+                                <li><h3>ср</h3></li>
+                                <li><h3>чт</h3></li>
+                                <li><h3>пт</h3></li>
+                                <li><h3>сб</h3></li>
+                                <li><h3>вс</h3></li>
+                            </ul>
+                            <ul class="days"></ul>
+                        </div>
+                        <div class="calendar-info">
+                            <h3 class="node open"></h3>
+                            <h3>свободно</h3>
+                            <h3 class="node your"></h3>
+                            <h3>ваше</h3>
+                            <h3 class="node closed"></h3>
+                            <h3>занято</h3>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button class="cancel">Отмена</button>
+                        <button class="bron">Бронировать</button>
+                    </div>
                 </div>
-                <div class="calendar-info">
-                    <h3 class="node open"></h3>
-                    <h3>свободно</h3>
-                    <h3 class="node your"></h3>
-                    <h3>ваше</h3>
-                    <h3 class="node closed"></h3>
-                    <h3>занято</h3>
-                </div>
-            </div>
-            <div class="buttons">
-                <button class="cancel">Отмена</button>
-                <button class="bron">Бронировать</button>
-            </div>
-        </div>
+            </dialog>
+        </template>
     </body>
 </html>

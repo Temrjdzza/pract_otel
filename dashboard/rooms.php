@@ -55,9 +55,11 @@
         </section>
 
         <section class="main">
+
+            <?php include "components/reservant.html"; ?>
             <ul class="list-rooms" id="list-rooms">
                 <?php include "components/room.html"; ?>
-                <script src="javascripts/rooms.js"></script>
+                <script type="module" src="javascripts/rooms.js"></script>
 
             </ul>
         </section>
