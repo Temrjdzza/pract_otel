@@ -9,13 +9,18 @@ class RESTRouter {
     public function __construct() {
         // endpoints для запросов
         $this->addRoute('GET', '/api/router.php/rooms', [$this, 'GetHotelRooms']);
+
+        $this->addRoute('GET', '/api/router.php/roomReservation', [$this, 'GetHotelBooking']);
         $this->addRoute('POST', '/api/router.php/roomReservation', [$this, 'PostHotelBooking']);
+
 
         $this->addRoute('GET','/api/router.php/sendBot', [$this,'SendBot']);
         $this->addRoute('GET', '/api/router.php/contacts', [$this,'GetContacts']);
 
         $this->addRoute('GET', '/api/router.php/reviews', [$this, 'GetReviews']);
         $this->addRoute('POST', '/api/router.php/review', [$this, 'PostReview']);
+
+
     }
 
     private function addRoute($method, $route, $callback) {
@@ -135,6 +140,68 @@ class RESTRouter {
         } catch (Exception $e) {
             $this->ExportErorr(500, 'Ошибка при получении списка номеров');
             exit;
+        }
+    }
+
+    private function GetHotelBooking($data) {
+        // Получаем ID из параметров запроса
+
+        $booking_id = isset($data['get_params']['id']) ? $data['get_params']['id'] : null;
+
+        // Проверяем наличие ID
+        if (!$booking_id) {
+            $this->ExportError(400, 'Не указан ID бронирования');
+            return;
+        }
+
+        // Подключение к базе данных
+        $link = mysqli_connect(
+            $this->host,
+            $this->user,
+            $this->password,
+            $this->db_name
+        );
+
+        if ($link === false) {
+            $this->ExportError(500, 'Ошибка подключения к базе данных: '.mysqli_connect_error());
+            return;
+        }
+
+        mysqli_set_charset($link, "utf8");
+
+        try {
+            // Запрос для получения информации о бронировании и комнате
+            $query = "
+                SELECT b.*, r.room_type, r.price 
+                FROM Bookings b
+                LEFT JOIN HotelRooms r ON b.room_id = r.room_id
+                WHERE b.room_id = ?
+            ";
+
+            $stmt = mysqli_prepare($link, $query);
+            if (!$stmt) {
+                throw new Exception('Ошибка подготовки запроса: '.mysqli_error($link));
+            }
+
+            $stmt->bind_param("i", $booking_id);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            if (!$result) {
+                throw new Exception('Ошибка выполнения запроса: '.mysqli_error($link));
+            }
+
+            $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            mysqli_close($link);
+
+            if (empty($rows)) {
+                $this->ExportError(404, 'Бронирование не найдено');
+                return;
+            }
+
+            $this->ExportResponse($rows);
+        } catch (Exception $e) {
+            $this->ExportError(500, 'Ошибка при получении бронирования: '.$e->getMessage());
         }
     }
 
