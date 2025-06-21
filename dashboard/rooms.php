@@ -28,14 +28,39 @@
 
                 <button class="filter">Фильтры</button>
                 <div class="filter-menu">
+                    <h3>Фильтры</h3><br>
+                    <select class="combobox">
+                        <option selected="selected" value="all">Любой</option>
+                        <option value="Апартаменты">Апартаменты</option>
+                        <option value="Люкс">Люкс</option>
+                        <option value="Полулюкс">Полулюкс</option>
+                        <option value="Стандарт">Стандарт</option>
+                        <option value="Студия">Студия</option>
+                    </select>
+                    <div class="filter-price">
+                        <h4>стоимость</h4>
+                        <input class="price-min" type="text" placeholder="от" />
+                        <input class="price-max" type="text" placeholder="до" />
+                    </div>
+                    <div class="filter-capacity">
+                        <h4>количество мест</h4>
+                        <input class="capacity-count" type="text" />
+                    </div>
+
+
+                    <button class="reboot">сброс</button>
+                    <button class="find">Найти</button>
                 </div>
             </div>
         </section>
 
         <section class="main">
+
+            <?php include "components/reservant.html"; ?>
             <ul class="list-rooms" id="list-rooms">
                 <?php include "components/room.html"; ?>
-                <script src="javascripts/rooms.js"></script>
+                <script type="module" src="javascripts/rooms.js"></script>
+
             </ul>
         </section>
 
