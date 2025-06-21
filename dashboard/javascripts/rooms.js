@@ -127,7 +127,7 @@ function clear_list_rooms() {
 }
 
 function url_constructor() {
-  params = "";
+  let params = "";
   if (filter_params["type"] != "")
     params += "room_type=" + filter_params["type"] + "&";
   if (filter_params["prices"] != "")
@@ -166,7 +166,7 @@ function create_dialog_bron(el, room_id) {
 
       const url = `/api/router.php/roomReservation?id=${room_id}&fio=${fio.value}&booking_start=${start_date}&booking_end=${end_date}`;
 
-      fetch(url).then();
+      fetch(url, { method: "post" }).then();
     } catch {}
 
     const parent = document.querySelector(".list-rooms");
@@ -258,6 +258,7 @@ function setCalendar(year, month, el) {
       } else if (li.className == "your") {
         li.className = "";
         anti_line_your();
+        clear_your(h3.textContent);
       }
       final_price();
     });
@@ -345,8 +346,10 @@ function anti_line_your() {
 
   let your = false;
   for (let i = children.length - 1; i >= 0; i--) {
-    if (children[i].className == "" && your) your = false;
-    else if (children[i].className == "your" && your) {
+    if (children[i].className == "" && your) {
+      your = false;
+      children[i].className = "your";
+    } else if (children[i].className == "your" && your) {
       arr.push(children[i]);
     } else if (children[i].className == "your" && !your) {
       if (arr.length > 0) {
@@ -366,6 +369,26 @@ function anti_line_your() {
   }
 
   return true;
+}
+
+function clear_your(number_day) {
+  const list_rooms = document.querySelector(".list-rooms");
+  const bron_menu = list_rooms.querySelector(".bron-menu");
+  const days = bron_menu.querySelector(".days");
+  const children = days.children;
+
+  let first = false;
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].className == "your") {
+      if (children[i].textContent == number_day) first = true;
+      break;
+    }
+  }
+
+  if (first)
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].className == "your") children[i].className = "";
+    }
 }
 
 function final_price() {
