@@ -117,6 +117,14 @@
                     .right-btn {
                         margin-right: 20px;
                     }
+
+                    .left-btn:hover {
+                        cursor: pointer;
+                    }
+
+                    .right-btn:hover {
+                        cursor: pointer;
+                    }
                 }
 
                 .name-days {

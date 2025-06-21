@@ -150,7 +150,7 @@ function create_dialog_bron(el, room_id) {
     year = date.getFullYear(),
     month = date.getMonth();
 
-  setCalendar(year, month, el);
+  setCalendar(year, month, el, room_id);
 
   const fio = el.querySelector(".input-fio");
 
@@ -227,7 +227,7 @@ const months = [
   "Декабрь",
 ];
 
-function setCalendar(year, month, el) {
+function setCalendar(year, month, el, room_id) {
   let prevlastday = new Date(year, month, 0);
   let lastday = new Date(year, month + 1, 0);
   let ulEl = el.querySelector(".days");
@@ -277,19 +277,85 @@ function setCalendar(year, month, el) {
 
   const prev_btn = el.querySelector(".left-btn");
   prev_btn.addEventListener("click", () => {
-    date = new Date(year, month - 1);
-    year = date.getFullYear();
-    month = date.getMonth();
-    setCalendar(year, month);
+    let new_date = new Date(year, month - 1),
+      new_year = new_date.getFullYear(),
+      new_month = new_date.getMonth();
+    const el = document
+      .querySelector(".list-rooms")
+      .querySelector(".bron-menu");
+    setCalendar(new_year, new_month, el, room_id);
   });
 
   const next_btn = el.querySelector(".right-btn");
   next_btn.addEventListener("click", () => {
-    date = new Date(year, month + 1);
-    year = date.getFullYear();
-    month = date.getMonth();
-    setCalendar(year, month);
+    let new_date = new Date(year, month + 1),
+      new_year = new_date.getFullYear(),
+      new_month = new_date.getMonth();
+
+    const el = document
+      .querySelector(".list-rooms")
+      .querySelector(".bron-menu");
+    setCalendar(new_year, new_month, el, room_id);
   });
+
+  set_closed(room_id);
+}
+
+function set_closed(room_id) {
+  try {
+    fetch(`/api/router.php/roomReservation?id=${room_id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        const list_rooms = document.querySelector(".list-rooms");
+        const bron_menu = list_rooms.querySelector(".bron-menu");
+        const days = bron_menu.querySelector(".days");
+        const children = days.children;
+        const now = new Date();
+
+        const year = bron_menu
+          .querySelector(".month-year")
+          .textContent.split(" ")[1];
+        const month = months.indexOf(
+          bron_menu.querySelector(".month-year").textContent.split(" ")[0],
+        );
+
+        for (let i = 0; i < data["data"].length; i++) {
+          const start_date = new Date(data["data"][i].booking_start);
+          const end_date = new Date(data["data"][i].booking_end);
+
+          const start_year = start_date.getFullYear();
+          const start_month = start_date.getMonth();
+          const start_day = start_date.getDate();
+
+          const end_year = end_date.getFullYear();
+          const end_month = end_date.getMonth();
+          const end_day = end_date.getDate();
+
+          for (let j = 0; j < children.length; j++) {
+            if (children[j].className != "not-active") {
+              if (
+                start_day <= parseInt(children[j].textContent) &&
+                parseInt(children[j].textContent) <= end_day &&
+                start_year <= parseInt(year) &&
+                parseInt(year) <= end_year &&
+                start_month <= month &&
+                month <= end_month
+              )
+                children[j].className = "closed";
+
+              if (
+                (parseInt(children[j].textContent) < now.getDate() &&
+                  month <= now.getMonth() &&
+                  parseInt(year) <= now.getFullYear()) ||
+                parseInt(year) < now.getFullYear() ||
+                month < now.getMonth()
+              )
+                children[j].classList.add("not-active");
+            }
+          }
+        }
+      });
+  } catch {}
 }
 
 function line_your() {
