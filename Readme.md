@@ -125,7 +125,7 @@ GET /api/router.php/contacts
 ### 4. Получение отзывов об отеле
 
 ```
-GET /api/router.php/reviews\
+GET /api/router.php/reviews
 ```
 
 Параметры запроса:
