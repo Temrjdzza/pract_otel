@@ -401,6 +401,7 @@ class RESTRouter {
         }
     }
 
+    
     private function PostReview($data) {  
         $fio = isset($data['get_params']['fio']) ? $data['get_params']['fio'] : null;
         $review = isset($data['get_params']['review']) ? $data['get_params']['review'] : null;
@@ -409,7 +410,7 @@ class RESTRouter {
         // echo $fio . $review . $rating;
     
         // Проверка обязательных полей
-        if (empty($fio) ||  empty($review) || isset($rating)) {
+        if (empty($fio) ||  empty($review) || !isset($rating)) {
             http_response_code(400);
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode([
