@@ -66,5 +66,6 @@
 </section>
 
         <?php include "components/footer.html"; ?>
+        <script type="module" src="javascripts/rooms.js"></script>
     </body>
 </html>
