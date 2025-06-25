@@ -1,18 +1,19 @@
 .rating-area {
-    overflow: hidden;
-    width: 265px;
+    
+    width: 40%;
     margin: 0 auto;
+    
 }
 .rating-area:not(:checked) > input {
     display: none;
 }
 .rating-area:not(:checked) > label {
     float: right;
-    width: 42px;
+    width: 60px;
     padding: 0;
     cursor: pointer;
-    font-size: 32px;
-    line-height: 32px;
+    font-size: 100px;
+    line-height: 60px;
     color: lightgrey;
 }
 .rating-area:not(:checked) > label:before {
