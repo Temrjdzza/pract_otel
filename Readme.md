@@ -154,7 +154,7 @@ GET /api/router.php/reviews
 ### 5. Добавление отзыва об отеле
 
 ```
-POST /api/router.php/leaveReview
+POST /api/router.php/review
 ```
 
 Параметры запроса:
@@ -168,7 +168,7 @@ POST /api/router.php/leaveReview
 Пример запроса:
 
 ```
-POST /api/router.php/leaveReview?fio=Иванов Иван&review=Отличный отель!&rating=5
+POST /api/router.php/review?fio=Иванов Иван&review=Отличный отель!&rating=5
 ```
 
 Ответ при успешном добавлении:
