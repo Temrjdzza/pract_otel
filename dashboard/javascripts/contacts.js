@@ -1,59 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = '/api/router.php/contacts';
+    const api = '/api/router.php/contacts';
+    const contactsContainer = document.getElementById('contacts-container');
     
-    function loadContacts() {
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    displayContacts(data.data);
-                } else {
-                    console.error('API returned error:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching contacts:', error);
-            });
+    if (!contactsContainer) return;
+
+    loadContacts(api);
+    function loadContacts(url) {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => renderContacts(data.data))
     }
-    
-    function displayContacts(contacts) {
-        const contactSection = document.querySelector('.contact-section');
-        
-        const contactsListContainer = document.createElement('div');
-        contactsListContainer.className = 'contacts-list';
-        
-        const contactsHeader = document.createElement('h2');
-        contactsHeader.textContent = 'Наша команда';
-        contactsListContainer.appendChild(contactsHeader);
-        
-        const contactsList = document.createElement('div');
-        contactsList.className = 'contacts-grid';
-        
+
+    function renderContacts(contacts) {
+        if (!contacts || !contacts.length) {
+            contactsContainer.innerHTML = `<div class="error-message">Контакты не найдены</div>`;
+            return;
+        }
+
+        let html = '';
         contacts.forEach(contact => {
-            const contactItem = document.createElement('div');
-            contactItem.className = 'contact-card';
-            
-            contactItem.innerHTML = `
-                <h3>${contact.name}</h3>
-                <div class="contact-details">
-                    ${contact.phone ? `<p><strong>Телефон:</strong> <a href="tel:${contact.phone}">${contact.phone}</a></p>` : ''}
-                    ${contact.email ? `<p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>` : ''}
+            html += `
+                <div class="contact-card">
+                    <h3>${contact.name || 'Имя не указано'}</h3>
+                    <div class="contact-details">
+                        ${contact.phone ? `<p><strong>Телефон:</strong> <a href="tel:${contact.phone}">${contact.phone}</a></p>` : ''}
+                        ${contact.email ? `<p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>` : ''}
+                    </div>
                 </div>
             `;
-            
-            contactsList.appendChild(contactItem);
         });
-        
-        contactsListContainer.appendChild(contactsList);
-        
-        const existingContactInfo = document.querySelector('.contact-info');
-        contactSection.insertBefore(contactsListContainer, existingContactInfo.nextSibling);
+
+        contactsContainer.innerHTML = html;
     }
     
-    loadContacts();
 });
